@@ -1,0 +1,13 @@
+name: my-nextjs-app
+
+services:
+  nextjs:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.init
+    volumes:
+      - ..:/app
+      - pnpm-store:/pnpm/store
+
+volumes:
+  pnpm-store:

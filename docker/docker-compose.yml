@@ -1,0 +1,32 @@
+name: my-nextjs-app
+
+services:
+  nextjs:
+    container_name: nextjs-dev
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/.next
+      # pnpm特有: pnpmのストアをキャッシュ
+      - pnpm-store:/pnpm/store
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - nextjs-network
+
+volumes:
+  pnpm-store:
+
+networks:
+  nextjs-network:
+    driver: bridge
