@@ -1,0 +1,34 @@
+{
+  "name": "Next.js Development",
+  "dockerComposeFile": "../docker/docker-compose.yml",
+  "service": "nextjs",
+  "workspaceFolder": "/app",
+
+  "overrideCommand": true,
+
+  "initializeCommand": "docker volume create pnpm-store",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  },
+
+  "forwardPorts": [3000],
+
+  "postCreateCommand": "pnpm install",
+
+  "remoteUser": "node"
+}
