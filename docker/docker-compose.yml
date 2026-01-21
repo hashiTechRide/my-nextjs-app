@@ -1,6 +1,21 @@
 name: my-nextjs-app
 
 services:
+  postgres:
+    container_name: diet-app-postgres
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=dietapp
+      - POSTGRES_PASSWORD=dietapp123
+      - POSTGRES_DB=dietapp
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - nextjs-network
+    restart: unless-stopped
+
   nextjs:
     container_name: nextjs-dev
     build:
@@ -18,14 +33,18 @@ services:
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
+      - DATABASE_URL=postgresql://dietapp:dietapp123@postgres:5432/dietapp
     stdin_open: true
     tty: true
     restart: unless-stopped
+    depends_on:
+      - postgres
     networks:
       - nextjs-network
 
 volumes:
   pnpm-store:
+  postgres-data:
 
 networks:
   nextjs-network:

@@ -1,101 +1,100 @@
 import { Meal, Exercise, DailyStats } from '../types/diet';
-import { format, parseISO, startOfDay, endOfDay } from 'date-fns';
-
-const MEALS_KEY = 'diet-app-meals';
-const EXERCISES_KEY = 'diet-app-exercises';
 
 export const storage = {
   // Meal operations
-  getMeals: (): Meal[] => {
-    if (typeof window === 'undefined') return [];
-    const data = localStorage.getItem(MEALS_KEY);
-    return data ? JSON.parse(data) : [];
+  getMeals: async (): Promise<Meal[]> => {
+    const response = await fetch('/api/meals');
+    if (!response.ok) throw new Error('Failed to fetch meals');
+    return response.json();
   },
 
-  saveMeal: (meal: Meal): void => {
-    const meals = storage.getMeals();
-    const existingIndex = meals.findIndex(m => m.id === meal.id);
-
-    if (existingIndex >= 0) {
-      meals[existingIndex] = meal;
+  saveMeal: async (meal: Meal): Promise<Meal> => {
+    if (meal.id && meal.id.length > 13) {
+      // Update existing meal (CUID format)
+      const response = await fetch(`/api/meals/${meal.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(meal),
+      });
+      if (!response.ok) throw new Error('Failed to update meal');
+      return response.json();
     } else {
-      meals.push(meal);
+      // Create new meal
+      const response = await fetch('/api/meals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(meal),
+      });
+      if (!response.ok) throw new Error('Failed to create meal');
+      return response.json();
     }
-
-    localStorage.setItem(MEALS_KEY, JSON.stringify(meals));
   },
 
-  deleteMeal: (id: string): void => {
-    const meals = storage.getMeals().filter(m => m.id !== id);
-    localStorage.setItem(MEALS_KEY, JSON.stringify(meals));
+  deleteMeal: async (id: string): Promise<void> => {
+    const response = await fetch(`/api/meals/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Failed to delete meal');
   },
 
-  getMealsByDate: (date: string): Meal[] => {
-    return storage.getMeals().filter(m => m.date === date);
+  getMealsByDate: async (date: string): Promise<Meal[]> => {
+    const response = await fetch(`/api/meals?date=${date}`);
+    if (!response.ok) throw new Error('Failed to fetch meals by date');
+    return response.json();
   },
 
   // Exercise operations
-  getExercises: (): Exercise[] => {
-    if (typeof window === 'undefined') return [];
-    const data = localStorage.getItem(EXERCISES_KEY);
-    return data ? JSON.parse(data) : [];
+  getExercises: async (): Promise<Exercise[]> => {
+    const response = await fetch('/api/exercises');
+    if (!response.ok) throw new Error('Failed to fetch exercises');
+    return response.json();
   },
 
-  saveExercise: (exercise: Exercise): void => {
-    const exercises = storage.getExercises();
-    const existingIndex = exercises.findIndex(e => e.id === exercise.id);
-
-    if (existingIndex >= 0) {
-      exercises[existingIndex] = exercise;
+  saveExercise: async (exercise: Exercise): Promise<Exercise> => {
+    if (exercise.id && exercise.id.length > 13) {
+      // Update existing exercise (CUID format)
+      const response = await fetch(`/api/exercises/${exercise.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(exercise),
+      });
+      if (!response.ok) throw new Error('Failed to update exercise');
+      return response.json();
     } else {
-      exercises.push(exercise);
+      // Create new exercise
+      const response = await fetch('/api/exercises', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(exercise),
+      });
+      if (!response.ok) throw new Error('Failed to create exercise');
+      return response.json();
     }
-
-    localStorage.setItem(EXERCISES_KEY, JSON.stringify(exercises));
   },
 
-  deleteExercise: (id: string): void => {
-    const exercises = storage.getExercises().filter(e => e.id !== id);
-    localStorage.setItem(EXERCISES_KEY, JSON.stringify(exercises));
+  deleteExercise: async (id: string): Promise<void> => {
+    const response = await fetch(`/api/exercises/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Failed to delete exercise');
   },
 
-  getExercisesByDate: (date: string): Exercise[] => {
-    return storage.getExercises().filter(e => e.date === date);
+  getExercisesByDate: async (date: string): Promise<Exercise[]> => {
+    const response = await fetch(`/api/exercises?date=${date}`);
+    if (!response.ok) throw new Error('Failed to fetch exercises by date');
+    return response.json();
   },
 
   // Statistics
-  getDailyStats: (date: string): DailyStats => {
-    const meals = storage.getMealsByDate(date);
-    const exercises = storage.getExercisesByDate(date);
-
-    const totalCaloriesConsumed = meals.reduce((sum, m) => sum + m.calories, 0);
-    const totalCaloriesBurned = exercises.reduce((sum, e) => sum + e.caloriesBurned, 0);
-    const totalProtein = meals.reduce((sum, m) => sum + m.protein, 0);
-    const totalCarbs = meals.reduce((sum, m) => sum + m.carbs, 0);
-    const totalFat = meals.reduce((sum, m) => sum + m.fat, 0);
-
-    return {
-      date,
-      totalCaloriesConsumed,
-      totalCaloriesBurned,
-      netCalories: totalCaloriesConsumed - totalCaloriesBurned,
-      totalProtein,
-      totalCarbs,
-      totalFat,
-    };
+  getDailyStats: async (date: string): Promise<DailyStats> => {
+    const response = await fetch(`/api/stats?date=${date}`);
+    if (!response.ok) throw new Error('Failed to fetch daily stats');
+    return response.json();
   },
 
-  getWeeklyStats: (endDate: string): DailyStats[] => {
-    const stats: DailyStats[] = [];
-    const end = parseISO(endDate);
-
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(end);
-      date.setDate(date.getDate() - i);
-      const dateStr = format(date, 'yyyy-MM-dd');
-      stats.push(storage.getDailyStats(dateStr));
-    }
-
-    return stats;
+  getWeeklyStats: async (endDate: string): Promise<DailyStats[]> => {
+    const response = await fetch(`/api/stats?endDate=${endDate}`);
+    if (!response.ok) throw new Error('Failed to fetch weekly stats');
+    return response.json();
   },
 };
