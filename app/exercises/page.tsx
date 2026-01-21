@@ -22,12 +22,16 @@ export default function ExercisesPage() {
     loadExercises();
   }, [selectedDate]);
 
-  const loadExercises = () => {
-    const data = storage.getExercisesByDate(selectedDate);
-    setExercises(data);
+  const loadExercises = async () => {
+    try {
+      const data = await storage.getExercisesByDate(selectedDate);
+      setExercises(data);
+    } catch (error) {
+      console.error('Failed to load exercises:', error);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const exercise: Exercise = {
@@ -36,9 +40,14 @@ export default function ExercisesPage() {
       ...formData,
     };
 
-    storage.saveExercise(exercise);
-    loadExercises();
-    resetForm();
+    try {
+      await storage.saveExercise(exercise);
+      await loadExercises();
+      resetForm();
+    } catch (error) {
+      console.error('Failed to save exercise:', error);
+      alert('運動の保存に失敗しました');
+    }
   };
 
   const handleEdit = (exercise: Exercise) => {
@@ -52,10 +61,15 @@ export default function ExercisesPage() {
     setIsFormOpen(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('この運動を削除しますか？')) {
-      storage.deleteExercise(id);
-      loadExercises();
+      try {
+        await storage.deleteExercise(id);
+        await loadExercises();
+      } catch (error) {
+        console.error('Failed to delete exercise:', error);
+        alert('運動の削除に失敗しました');
+      }
     }
   };
 

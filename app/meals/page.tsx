@@ -24,12 +24,16 @@ export default function MealsPage() {
     loadMeals();
   }, [selectedDate]);
 
-  const loadMeals = () => {
-    const data = storage.getMealsByDate(selectedDate);
-    setMeals(data);
+  const loadMeals = async () => {
+    try {
+      const data = await storage.getMealsByDate(selectedDate);
+      setMeals(data);
+    } catch (error) {
+      console.error('Failed to load meals:', error);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const meal: Meal = {
@@ -38,9 +42,14 @@ export default function MealsPage() {
       ...formData,
     };
 
-    storage.saveMeal(meal);
-    loadMeals();
-    resetForm();
+    try {
+      await storage.saveMeal(meal);
+      await loadMeals();
+      resetForm();
+    } catch (error) {
+      console.error('Failed to save meal:', error);
+      alert('食事の保存に失敗しました');
+    }
   };
 
   const handleEdit = (meal: Meal) => {
@@ -56,10 +65,15 @@ export default function MealsPage() {
     setIsFormOpen(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('この食事を削除しますか？')) {
-      storage.deleteMeal(id);
-      loadMeals();
+      try {
+        await storage.deleteMeal(id);
+        await loadMeals();
+      } catch (error) {
+        console.error('Failed to delete meal:', error);
+        alert('食事の削除に失敗しました');
+      }
     }
   };
 

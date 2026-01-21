@@ -14,9 +14,13 @@ export default function Home() {
     loadStats();
   }, [selectedDate]);
 
-  const loadStats = () => {
-    const stats = storage.getDailyStats(selectedDate);
-    setTodayStats(stats);
+  const loadStats = async () => {
+    try {
+      const stats = await storage.getDailyStats(selectedDate);
+      setTodayStats(stats);
+    } catch (error) {
+      console.error('Failed to load stats:', error);
+    }
   };
 
   if (!todayStats) {

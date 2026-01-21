@@ -25,9 +25,13 @@ export default function StatsPage() {
     loadStats();
   }, [endDate]);
 
-  const loadStats = () => {
-    const weeklyStats = storage.getWeeklyStats(endDate);
-    setStats(weeklyStats);
+  const loadStats = async () => {
+    try {
+      const weeklyStats = await storage.getWeeklyStats(endDate);
+      setStats(weeklyStats);
+    } catch (error) {
+      console.error('Failed to load stats:', error);
+    }
   };
 
   const chartData = stats.map((stat) => ({
