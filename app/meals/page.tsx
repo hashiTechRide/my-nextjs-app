@@ -103,36 +103,36 @@ export default function MealsPage() {
   const totalCalories = meals.reduce((sum, m) => sum + m.calories, 0);
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">食事管理</h1>
+    <div className="max-w-4xl mx-auto px-4">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">食事管理</h1>
 
-      <div className="mb-6 flex gap-4 items-center">
+      <div className="mb-6 flex flex-col md:flex-row gap-4 md:items-center">
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="px-4 py-2 border rounded-lg"
+          className="px-4 py-3 border border-rose-200 rounded-xl bg-white text-gray-800 shadow-sm"
         />
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="bg-gradient-to-r from-rose-400 to-rose-500 text-white px-6 py-3 rounded-xl hover:from-rose-500 hover:to-rose-600 transition-all shadow-md font-medium"
         >
           {isFormOpen ? 'キャンセル' : '食事を追加'}
         </button>
       </div>
 
       {isFormOpen && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6 border">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="bg-white p-5 md:p-6 rounded-2xl shadow-sm mb-6 border border-rose-100">
+          <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-800">
             {editingMeal ? '食事を編集' : '食事を追加'}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">種類</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">種類</label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value as Meal['type'] })}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
                 required
               >
                 <option value="breakfast">朝食</option>
@@ -143,77 +143,78 @@ export default function MealsPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">食事名</label>
+              <label className="block text-sm font-medium mb-2 text-gray-700">食事名</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
+                placeholder="例: ご飯、サラダ"
                 required
               />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">カロリー (kcal)</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700">カロリー</label>
                 <input
                   type="number"
                   value={formData.calories}
                   onChange={(e) => setFormData({ ...formData, calories: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
                   min="0"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">タンパク質 (g)</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700">タンパク質</label>
                 <input
                   type="number"
                   value={formData.protein}
                   onChange={(e) => setFormData({ ...formData, protein: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
                   min="0"
                   step="0.1"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">炭水化物 (g)</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700">炭水化物</label>
                 <input
                   type="number"
                   value={formData.carbs}
                   onChange={(e) => setFormData({ ...formData, carbs: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
                   min="0"
                   step="0.1"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">脂質 (g)</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700">脂質</label>
                 <input
                   type="number"
                   value={formData.fat}
                   onChange={(e) => setFormData({ ...formData, fat: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-800"
                   min="0"
                   step="0.1"
                 />
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3 pt-2">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                className="flex-1 md:flex-none bg-gradient-to-r from-rose-400 to-rose-500 text-white px-6 py-3 rounded-xl hover:from-rose-500 hover:to-rose-600 transition-all shadow-md font-medium"
               >
                 {editingMeal ? '更新' : '追加'}
               </button>
               <button
                 type="button"
                 onClick={resetForm}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400"
+                className="flex-1 md:flex-none bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium"
               >
                 キャンセル
               </button>
@@ -222,44 +223,44 @@ export default function MealsPage() {
         </div>
       )}
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold mb-2">本日の合計</h2>
-        <p className="text-2xl font-bold text-blue-600">{totalCalories} kcal</p>
+      <div className="bg-white p-5 md:p-6 rounded-2xl shadow-sm mb-6 border border-rose-100">
+        <h2 className="text-lg md:text-xl font-semibold mb-2 text-gray-800">本日の合計</h2>
+        <p className="text-2xl md:text-3xl font-bold text-rose-500">{totalCalories} kcal</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {meals.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500 bg-white rounded-2xl border border-rose-100">
             この日の食事記録はありません
           </div>
         ) : (
           meals.map((meal) => (
-            <div key={meal.id} className="bg-white p-4 rounded-lg shadow border">
-              <div className="flex justify-between items-start">
+            <div key={meal.id} className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-rose-100">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded">
+                  <div className="flex items-center gap-2 mb-2 flex-wrap">
+                    <span className="bg-rose-100 text-rose-700 text-sm px-3 py-1 rounded-full font-medium">
                       {getMealTypeLabel(meal.type)}
                     </span>
-                    <h3 className="text-lg font-semibold">{meal.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{meal.name}</h3>
                   </div>
-                  <div className="flex gap-4 text-sm text-gray-600">
-                    <span>カロリー: {meal.calories} kcal</span>
-                    <span>タンパク質: {meal.protein}g</span>
-                    <span>炭水化物: {meal.carbs}g</span>
-                    <span>脂質: {meal.fat}g</span>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+                    <span>{meal.calories} kcal</span>
+                    <span>P: {meal.protein}g</span>
+                    <span>C: {meal.carbs}g</span>
+                    <span>F: {meal.fat}g</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEdit(meal)}
-                    className="text-blue-600 hover:text-blue-800 px-3 py-1"
+                    className="text-rose-500 hover:text-rose-700 px-4 py-2 rounded-lg hover:bg-rose-50 transition-colors font-medium"
                   >
                     編集
                   </button>
                   <button
                     onClick={() => handleDelete(meal.id)}
-                    className="text-red-600 hover:text-red-800 px-3 py-1"
+                    className="text-gray-500 hover:text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors font-medium"
                   >
                     削除
                   </button>

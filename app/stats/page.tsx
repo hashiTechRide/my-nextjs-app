@@ -54,116 +54,116 @@ export default function StatsPage() {
   const avgBurned = stats.length > 0 ? Math.round(totalBurned / stats.length) : 0;
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">統計・グラフ</h1>
+    <div className="max-w-6xl mx-auto px-4">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">統計・グラフ</h1>
 
       <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">期間の終了日</label>
+        <label className="block text-sm font-medium mb-2 text-gray-700">期間の終了日</label>
         <input
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          className="px-4 py-2 border rounded-lg"
+          className="w-full md:w-auto px-4 py-3 border border-violet-200 rounded-xl bg-white text-gray-800 shadow-sm"
         />
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-gray-500 mt-2">
           過去7日間のデータを表示します
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-600">平均摂取カロリー</p>
-          <p className="text-2xl font-bold text-blue-600">{avgConsumed} kcal</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-rose-100">
+          <p className="text-xs md:text-sm text-gray-600 mb-1">平均摂取</p>
+          <p className="text-lg md:text-2xl font-bold text-rose-500">{avgConsumed} kcal</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-600">平均消費カロリー</p>
-          <p className="text-2xl font-bold text-green-600">{avgBurned} kcal</p>
+        <div className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-emerald-100">
+          <p className="text-xs md:text-sm text-gray-600 mb-1">平均消費</p>
+          <p className="text-lg md:text-2xl font-bold text-emerald-500">{avgBurned} kcal</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-600">平均正味カロリー</p>
-          <p className="text-2xl font-bold text-purple-600">{avgConsumed - avgBurned} kcal</p>
+        <div className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-violet-100">
+          <p className="text-xs md:text-sm text-gray-600 mb-1">平均正味</p>
+          <p className="text-lg md:text-2xl font-bold text-violet-500">{avgConsumed - avgBurned} kcal</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <p className="text-sm text-gray-600">記録日数</p>
-          <p className="text-2xl font-bold text-gray-700">{stats.length} 日</p>
+        <div className="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100">
+          <p className="text-xs md:text-sm text-gray-600 mb-1">記録日数</p>
+          <p className="text-lg md:text-2xl font-bold text-gray-700">{stats.length} 日</p>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 className="text-xl font-semibold mb-4">カロリー推移</h2>
-        <ResponsiveContainer width="100%" height={300}>
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-rose-100 mb-6 md:mb-8">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-800">カロリー推移</h2>
+        <ResponsiveContainer width="100%" height={250}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
             <Legend />
             <Line
               type="monotone"
               dataKey="摂取"
-              stroke="#3b82f6"
+              stroke="#fb7185"
               strokeWidth={2}
-              dot={{ r: 4 }}
+              dot={{ r: 3 }}
             />
             <Line
               type="monotone"
               dataKey="消費"
-              stroke="#10b981"
+              stroke="#34d399"
               strokeWidth={2}
-              dot={{ r: 4 }}
+              dot={{ r: 3 }}
             />
             <Line
               type="monotone"
               dataKey="正味"
-              stroke="#8b5cf6"
+              stroke="#a78bfa"
               strokeWidth={2}
-              dot={{ r: 4 }}
+              dot={{ r: 3 }}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 className="text-xl font-semibold mb-4">栄養素バランス</h2>
-        <ResponsiveContainer width="100%" height={300}>
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-rose-100 mb-6 md:mb-8">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-800">栄養素バランス</h2>
+        <ResponsiveContainer width="100%" height={250}>
           <BarChart data={nutritionData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="タンパク質" fill="#ef4444" />
-            <Bar dataKey="炭水化物" fill="#f59e0b" />
-            <Bar dataKey="脂質" fill="#06b6d4" />
+            <Bar dataKey="タンパク質" fill="#fb7185" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="炭水化物" fill="#fbbf24" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="脂質" fill="#22d3ee" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">日別詳細</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-rose-100">
+        <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-800">日別詳細</h2>
+        <div className="overflow-x-auto -mx-4 md:mx-0">
+          <table className="w-full min-w-[600px]">
             <thead>
-              <tr className="border-b">
-                <th className="text-left py-2 px-4">日付</th>
-                <th className="text-right py-2 px-4">摂取 (kcal)</th>
-                <th className="text-right py-2 px-4">消費 (kcal)</th>
-                <th className="text-right py-2 px-4">正味 (kcal)</th>
-                <th className="text-right py-2 px-4">タンパク質 (g)</th>
-                <th className="text-right py-2 px-4">炭水化物 (g)</th>
-                <th className="text-right py-2 px-4">脂質 (g)</th>
+              <tr className="border-b border-rose-100">
+                <th className="text-left py-3 px-4 text-sm font-medium text-gray-600">日付</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">摂取</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">消費</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">正味</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">P</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">C</th>
+                <th className="text-right py-3 px-4 text-sm font-medium text-gray-600">F</th>
               </tr>
             </thead>
             <tbody>
               {stats.map((stat) => (
-                <tr key={stat.date} className="border-b hover:bg-gray-50">
-                  <td className="py-2 px-4">{format(new Date(stat.date), 'yyyy/MM/dd (E)', { locale: undefined })}</td>
-                  <td className="text-right py-2 px-4">{stat.totalCaloriesConsumed}</td>
-                  <td className="text-right py-2 px-4">{stat.totalCaloriesBurned}</td>
-                  <td className="text-right py-2 px-4">{stat.netCalories}</td>
-                  <td className="text-right py-2 px-4">{stat.totalProtein.toFixed(1)}</td>
-                  <td className="text-right py-2 px-4">{stat.totalCarbs.toFixed(1)}</td>
-                  <td className="text-right py-2 px-4">{stat.totalFat.toFixed(1)}</td>
+                <tr key={stat.date} className="border-b border-rose-50 hover:bg-rose-50/50 transition-colors">
+                  <td className="py-3 px-4 text-sm text-gray-800">{format(new Date(stat.date), 'M/d')}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.totalCaloriesConsumed}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.totalCaloriesBurned}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.netCalories}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.totalProtein.toFixed(1)}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.totalCarbs.toFixed(1)}</td>
+                  <td className="text-right py-3 px-4 text-sm text-gray-800">{stat.totalFat.toFixed(1)}</td>
                 </tr>
               ))}
             </tbody>
